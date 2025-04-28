@@ -1,10 +1,12 @@
-import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { View, ScrollView, ActivityIndicator, FlatList } from "react-native";
 import { getLatestGames } from "../lib/metacritic";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { GameCard } from "./GameCard";
 
 export function Main() {
   const [games, setGames] = useState([]);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     console.log("loadGames ejecutándose...");
@@ -15,35 +17,13 @@ export function Main() {
 
   return (
     <>
-      {games.map((game) => (
-        <View key={game.slug} style={styles.card}>
-          <Image source={{ uri: game.image }} style={styles.image} />
-          <Text style={styles.title}>{game.title}</Text>
-        </View>
-      ))}
+      <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+        {games.length === 0 ? (
+          <ActivityIndicator size={"large"}/>
+        ) : (
+          <FlatList data={games} keyExtractor={game => game.slug} renderItem={({item}) => <GameCard game={item} />} />
+        )}
+      </View>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  card: {
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  image: {
-    width: 107,
-    height: 147,
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 10,
-  },
-});
