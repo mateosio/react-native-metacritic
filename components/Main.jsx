@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { View, ScrollView, ActivityIndicator, FlatList } from "react-native";
+import { View, ActivityIndicator, FlatList } from "react-native";
+import { Link } from "expo-router";
 import { getLatestGames } from "../lib/metacritic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { GameCard } from "./GameCard";
+import { AnimatedGameCard } from "./GameCard";
+import { Logo } from "./Logo";
 
 export function Main() {
   const [games, setGames] = useState([]);
@@ -17,11 +19,21 @@ export function Main() {
 
   return (
     <>
-      <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+      <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, scrollY: "scroll", height: '100%' }}>
+        <View style={{ marginBottom: 20 }}>
+          <Logo/>
+        </View>
+        <Link href="/about" className="text-blue-400 text-xl">Ir al about</Link>
         {games.length === 0 ? (
-          <ActivityIndicator size={"large"}/>
+          <ActivityIndicator size={"large"} />
         ) : (
-          <FlatList data={games} keyExtractor={game => game.slug} renderItem={({item}) => <GameCard game={item} />} />
+          <FlatList
+            data={games}
+            keyExtractor={(game) => game.slug}
+            renderItem={({ item, index }) => (
+              <AnimatedGameCard game={item} index={index} />
+            )}
+          />
         )}
       </View>
     </>
