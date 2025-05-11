@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { View, ActivityIndicator, FlatList, Pressable } from "react-native";
-import { Link } from "expo-router";
+import { ActivityIndicator, FlatList,  } from "react-native";
 import { getLatestGames } from "../lib/metacritic";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatedGameCard } from "./GameCard";
-import { Logo } from "./Logo";
-import { CircleInfoIcon } from "./Icons";
+import Screen from "./Screen";
 
 
 export function Main() {
   const [games, setGames] = useState([]);
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
 
   useEffect(() => {
     console.log("loadGames ejecutándose...");
@@ -21,22 +19,13 @@ export function Main() {
 
   return (
     <>
-      <View
-        style={{
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
+      <Screen style={{
+          // paddingTop: insets.top,
+          // paddingBottom: insets.bottom,
           scrollY: "scroll",
           height: "100%",
         }}
-      >
-        <View className="pt-10" style={{ marginBottom: 20 }}>
-          <Logo />
-        </View>
-        <Link asChild href="/about" className="text-blue-400 text-xl">
-          <Pressable>
-          <CircleInfoIcon />
-          </Pressable>
-        </Link>
+      >        
         {games.length === 0 ? (
           <ActivityIndicator size={"large"} />
         ) : (
@@ -48,7 +37,7 @@ export function Main() {
             )}
           />
         )}
-      </View>
+      </Screen>
     </>
   );
 }
